@@ -127,13 +127,13 @@ write_csv(borders_csv, "data/borders.csv")
 ### Explore ----
 
 ## Mean/Median & Summary (33) ----
-borders <- read_rds("data/borders.RDS")
+borders <- read_rds("data/borders.rds")
 mean(borders[["LengthOfStay"]])
 summary(borders$LengthOfStay)
 
 
 ## Frequencies & Crosstabs (34) ----
-borders <- read_rds("data/borders.RDS")
+borders <- read_rds("data/borders.rds")
 addmargins(table(borders$HospitalCode, borders$Sex))
 
 
@@ -141,7 +141,7 @@ addmargins(table(borders$HospitalCode, borders$Sex))
 # All examples in the wrangle section require dplyr to be loaded
 library(dplyr)
 # All examples in the wrangle section require the borders dataset
-borders <- read_rds("data/borders.RDS")
+borders <- read_rds("data/borders.rds")
 
 ## Pipe Operator (39) ----
 # No pipe
