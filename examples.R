@@ -112,10 +112,11 @@ smr01 <- dbGetQuery(smra_connection, paste("select DISCHARGE_DATE, LOCATION, MAI
 
 
 ## RDS (30) ----
+library(readr)
 # Read in file
-borders_RDS <- 	readRDS("data/borders.rds")
+borders_RDS <- 	read_rds("data/borders.rds")
 # Export/write file
-saveRDS(borders_RDS, "data/borders.rds")
+write_rds(borders_RDS, "data/borders.rds")
 
 
 ## Write CSV (31) ----
@@ -126,13 +127,13 @@ write_csv(borders_csv, "data/borders.csv")
 ### Explore ----
 
 ## Mean/Median & Summary (33) ----
-borders <- readRDS("data/borders.RDS")
+borders <- read_rds("data/borders.RDS")
 mean(borders[["LengthOfStay"]])
 summary(borders$LengthOfStay)
 
 
 ## Frequencies & Crosstabs (34) ----
-borders <- readRDS("data/borders.RDS")
+borders <- read_rds("data/borders.RDS")
 addmargins(table(borders$HospitalCode, borders$Sex))
 
 
@@ -140,7 +141,7 @@ addmargins(table(borders$HospitalCode, borders$Sex))
 # All examples in the wrangle section require dplyr to be loaded
 library(dplyr)
 # All examples in the wrangle section require the borders dataset
-borders <- readRDS("data/borders.RDS")
+borders <- read_rds("data/borders.RDS")
 
 ## Pipe Operator (39) ----
 # No pipe
