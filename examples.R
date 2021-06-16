@@ -2,7 +2,6 @@
 ## Script Details ----
 # Name of file - examples.R
 # Original author - Russell McCreath
-# Orginal date - August 2020
 #
 # Version of R - 3.6.1
 #
@@ -12,39 +11,54 @@
 # are loaded repeatedly.
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 
+#### Day 1 ----
 
 ### Foundations ----
 
-## Input (8) ----
-# Example 1
-hello_world <- "Hello World"
-print(hello_world)
 
-
-## Basic Data Types (9) ----
+## Basic Data Types (7) ----
 typeof("Hello World")
 is.numeric(123.5)
-print(typeof(2 + 2i))
+print(typeof(TRUE))
 
 
-## Type Conversion (10) ----
+## Type Conversion (8) ----
 as.character(123.5)
 as.numeric("123.5")
 as.logical("False")
 
 
-## Vectors (13) ----
-vector("logical", 4)
+## Anatomy of a Program (12) ----
+# Example 1
+hello_world <- "Hello World"
+print(hello_world)
+
+# Remove the created object, hello_world
+rm(hello_world)
+
+
+## Style Guide (13) ----
+# Bad
+pts <- ( 'Al','Bert' )
+# Good
+patients <- c("Al", "Bert")
+
+# Remove the created objects, pts & patients
+rm(pts, patients)
+
+
+## Vectors (16) ----
 c("a", "c", "f", "b")[1]
-c(2, 5, 1, "abc")[2]
+c(2, 5, 1, "abc")[3:4]
+vector("logical", 4)
 
 
-## Lists (14) ----
+## Lists (18) ----
 list("abc", 4, FALSE)[1:2]
 list(list(2, 3), "abc")[[2]]
 
 
-## Naming List Elements (15) ----
+## Naming List Elements (19) ----
 x <- list("Ch" = "a", "Nm" = 2)
 names(x) <- c("Char", "Num")
 x$Char
@@ -53,7 +67,15 @@ x$Char
 rm(x)
 
 
-## Matrices (16) ----
+## Factors (20) ----
+x <- factor(c("M", "F", "M"), 	levels = c("F", "M"))
+x
+
+# Remove the created object, x
+rm(x)
+
+
+## Matrices (22) ----
 x <- matrix(1:6, 2, 3)
 x
 x[2, 3]
@@ -62,43 +84,109 @@ x[2, 3]
 rm(x)
 
 
-## Factors (17) ----
-x <- factor(c(1, 2, 1, 2, 2, 1), levels = c(2, 1))
-x
+## Data Frames (23) ----
+data.frame(name = c("Harry", "Sarah"), score = c(62, 91))
+
+
+## Tibbles (25) ----
+tibble(name = c("Harry", "Sarah"), score = c(62, 91))
+
+
+## Anatomy of a Function (27) ----
+mult_2 <- function(x){
+  x <- x * 2
+  return(x)
+}
+mult_2(4)
+
+# Remove the created object, mult_2
+rm(mult_2)
+
+
+## Packages (28) ----
+install.packages("tidyverse")
+library(tidyverse)
+
+
+## Control Flow - if statements (29) ----
+library(dplyr)
+x <- 5
+if_else(x > 10, TRUE, FALSE)
 
 # Remove the created object, x
 rm(x)
 
 
-## Data Frames (18) ----
-data.frame(name = c("Harry", "Sarah"), score = c(62, 91))
+## Control Flow - case statements (31) ----
+library(dplyr)
+x <- c(1, 2, 3, 4, 5)
+case_when(x < 3 ~ "LT3", 
+          x %% 2 == 0 ~ "Even")
+
+# Remove the created object, x
+rm(x)
+
+
+## Iteration - for loop (33) ----
+files <- list.files(pattern = ".csv")
+all_files <- list()
+for(i in seq_along(files)) {
+  all_files[[i]] <- read.csv(files[i])
+}
+
+# Remove the created object, files & all_files
+rm(files, all_files)
+
+
+## Iteration - loop with purrr (34) ----
+library(purrr)
+files <- list.files(pattern = “.csv”)
+all_files <- map(files, read_csv)
+
+# Remove the created object, files & all_files
+rm(files, all_files)
 
 
 ### Data Flow ----
 
-## Working Directory (25) ----
+## Working Directory (39) ----
 getwd()
+here()
 
 
-## Read CSV (26) ----
+## Read CSV (40) ----
 library(readr)
 borders_csv <- read_csv("data/Borders.csv")
 View(borders_csv)
 
 
-## Read SPSS (27) ----
+## Read RDS (41) ----
+library(readr)
+borders_RDS <- 	read_rds("data/borders.rds")
+write_rds(borders, "data/borders.rds")
+
+
+## Read SPSS (42) ----
 library(haven)
 borders_spss <- read_sav("data/Borders.sav")
 View(borders_spss)
 
 
-## Read Web (28) ----
+## Read Web (43) ----
 library(readr)
 hospital_codes <- read_csv("https://www.opendata.nhs.scot/dataset/cbd1802e-0e04-4282-88eb-d7bdcfb120f0/resource/c698f450-eeed-41a0-88f7-c1e40a568acc/download/current_nhs_hospitals_in_scotland_010720.csv")
 View(hospital_codes)
 
 
-## Database SMRA (29) ----
+## Open Data - CKAN API (44) ----
+library(ckanr)
+ckan <- src_ckan("https://www.openda	ta.nhs.scot")
+res_id <- "<ID>"
+resource <- dplyr::tbl(src = ckan$con, from = res_id) %>%
+  as_tibble()
+
+
+## Database SMRA (45) ----
 library(odbc)
 # Establish connection
 smra_connection <- dbConnect(drv = odbc(), 
@@ -111,29 +199,21 @@ smr01 <- dbGetQuery(smra_connection, paste("select DISCHARGE_DATE, LOCATION, MAI
                                            "where ROWNUM <= 100"))
 
 
-## RDS (30) ----
-library(readr)
-# Read in file
-borders_RDS <- 	read_rds("data/borders.rds")
-# Export/write file
-write_rds(borders_RDS, "data/borders.rds")
-
-
-## Write CSV (31) ----
+## Write CSV (46) ----
 library(readr)
 write_csv(borders_csv, "data/borders.csv")
 
 
 ### Explore ----
 
-## Mean/Median & Summary (33) ----
-borders <- read_rds("data/borders.rds")
+## Mean/Median & Summary (48) ----
+borders <- readRDS("data/borders.RDS")
 mean(borders[["LengthOfStay"]])
 summary(borders$LengthOfStay)
 
 
-## Frequencies & Crosstabs (34) ----
-borders <- read_rds("data/borders.rds")
+## Frequencies & Crosstabs (49) ----
+borders <- readRDS("data/borders.RDS")
 addmargins(table(borders$HospitalCode, borders$Sex))
 
 
@@ -141,9 +221,12 @@ addmargins(table(borders$HospitalCode, borders$Sex))
 # All examples in the wrangle section require dplyr to be loaded
 library(dplyr)
 # All examples in the wrangle section require the borders dataset
-borders <- read_rds("data/borders.rds")
+borders <- readRDS("data/borders.RDS")
 
-## Pipe Operator (39) ----
+
+#### Day 2 ----
+
+## Pipe Operator (6) ----
 # No pipe
 arrange(filter(borders, HospitalCode == "B102H"), Dateofbirth)
 # Pipe
@@ -152,7 +235,7 @@ borders %>%
   arrange(Dateofbirth)
 
 
-## Filter (40) ----
+## Filter (7) ----
 # all cases with E12 specialty
 borders %>% 
   filter(Specialty == "E12")
@@ -163,122 +246,61 @@ borders %>%
            LengthOfStay > 10)
 
 
-## Mutate (41) ----
+## Mutate (8) ----
 # length of stay divided by 2
 borders %>%
   mutate(los_div2 = LengthOfStay / 2)
 
 
-## Arrange (42) ----
+## Arrange (9) ----
 # sort by Hospital Code
 borders %>%
   arrange(HospitalCode)
 
 
-## Select (43) ----
+## Select (10) ----
 # remove Postcode
 borders %>%
   select(-Postcode)
 
 
-## Group By (45) ----
+## Group By (12) ----
 # sort by Hospital Code
 borders %>%
   group_by(HospitalCode)
 
 
-## Summarise (46) ----
+## Summarise (13) ----
 # avg length of stay by hospital
 borders %>%
   group_by(HospitalCode) %>%
   summarise(mean_los = mean(LengthOfStay))
 
 
-## Count (47) ----
+## Count (14) ----
 # counts of specialty
 borders %>%
   count(Specialty, sort = TRUE)
 
 
-## Rename (49) ----
+## Rename (16) ----
 # rename Date of Birth column
 borders %>%
   rename(date_of_birth = Dateofbirth)
 
 
-## Recode (50) ----
+## Recode (17) ----
 # change hospital code
 borders %>%
   mutate(HospitalCode = recode("B120V" = "B120H"))
 
 
-## Joining Tables (52) ----
+## Joining Tables (19) ----
 # merge baby data
 baby5 <- read_csv("data/Baby5.csv")
 baby6 <- read_csv("data/Baby6.csv")
 baby_joined %>%
   left_join(baby5, baby6, by = c("FAMILYID", "DOB"))
-
-
-### Visualise ----
-# All examples in the wrangle section require ggplot2 to be loaded
-library(ggplot2)
-
-## Line Graph (56) ----
-# Define data
-line_data <- data.frame(x = c(1, 3, 2, 4), 
-                   y = c(4, 8, 7, 11))
-
-# Plot the data
-line_plot <- ggplot(line_data, aes(x, y)) + 
-  geom_line() +
-  geom_point()
-
-# View Plot
-line_plot
-
-
-## Bar Plot (57) ----
-# Define data
-bar_data <- read_csv("data/BORDERS (inc Age).csv")
-                  
-# Plot the data
-bar_plot <- ggplot(bar_data) + 
-  geom_bar(aes(x = admissionday))
-
-# View plot
-bar_plot
-
-
-## Scatter Plot (58) ----
-# Define data
-scatter_data <- read_csv("data/BORDERS (inc Age).csv")
-
-# Plot the data
-scatter_plot <- ggplot(scatter_data, aes(x =	ageonadmission, 
-                                          y = lengthofstay1)) + 
-  geom_point()
-
-# View plot
-scatter_plot
-
-
-## Customisation (59) ----
-# Define data
-custom_bar_data <- read_csv("data/BORDERS (inc Age).csv")
-
-# Plot the data with customisations
-custom_bar_plot <- ggplot(custom_bar_data) + 
-  geom_bar(aes(x = admissionday), 
-           fill = "magenta4", 
-           width = 0.5) +
-  # add titles
-  xlab("Admission Day") +
-  ylab("Num. Admissions") +
-  ggtitle("Dist. Admissions")
-
-# View plot
-custom_bar_plot
 
 
 ### END OF SCRIPT ###
