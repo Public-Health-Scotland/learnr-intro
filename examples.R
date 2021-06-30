@@ -121,17 +121,19 @@ rm(x)
 library(dplyr)
 x <- c(1, 2, 3, 4, 5)
 case_when(x < 3 ~ "LT3", 
-          x %% 2 == 0 ~ "Even")
+          x %% 2 == 0 ~ "Even", 
+          TRUE ~ "Other")
+# Doesn't need to be 'Other' necessarily but do think we should show what happens if none of the conditions apply
 
 # Remove the created object, x
 rm(x)
 
 
 ## Iteration - for loop (33) ----
-files <- list.files(pattern = ".csv")
+files <- list.files(path = here::here("data"), pattern = ".csv")
 all_files <- list()
 for(i in seq_along(files)) {
-  all_files[[i]] <- read.csv(files[i])
+  all_files[[i]] <- read.csv(paste0("data/", files[i]))
 }
 
 # Remove the created object, files & all_files
@@ -140,8 +142,8 @@ rm(files, all_files)
 
 ## Iteration - loop with purrr (34) ----
 library(purrr)
-files <- list.files(pattern = “.csv”)
-all_files <- map(files, read_csv)
+files <- list.files(path = here::here("data"), pattern = ".csv")
+all_files <- map(paste0("data/", files), read_csv)
 
 # Remove the created object, files & all_files
 rm(files, all_files)
@@ -180,7 +182,7 @@ View(hospital_codes)
 
 ## Open Data - CKAN API (44) ----
 library(ckanr)
-ckan <- src_ckan("https://www.openda	ta.nhs.scot")
+ckan <- src_ckan("https://www.opendata.nhs.scot")
 res_id <- "<ID>"
 resource <- dplyr::tbl(src = ckan$con, from = res_id) %>%
   as_tibble()
@@ -214,6 +216,16 @@ summary(borders$LengthOfStay)
 
 ## Frequencies & Crosstabs (49) ----
 borders <- readRDS("data/borders.RDS")
+
+# Frequency Table
+table(borders$HospitalCode)
+
+# Crosstabs
+table(borders$HospitalCode, borders$Sex)
+# Include NAs
+table(borders$HospitalCode, borders$Sex, exclude = NULL)
+
+# Add Totals
 addmargins(table(borders$HospitalCode, borders$Sex))
 
 
