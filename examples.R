@@ -168,8 +168,8 @@ View(borders_csv)
 
 ## Read RDS (41) ----
 library(readr)
-borders_RDS <- 	read_rds("data/borders.rds")
-write_rds(borders, "data/borders.rds")
+borders_rds <- read_rds("data/borders.rds")
+write_rds(borders_rds, "data/borders.rds")
 
 
 ## Read SPSS (42) ----
@@ -223,7 +223,8 @@ summary(borders$LengthOfStay)
 
 
 ## Frequencies & Crosstabs (49) ----
-borders <- readRDS("data/borders.RDS")
+library(readr)
+borders <- read_rds("data/borders.rds")
 
 # Frequency Table
 table(borders$HospitalCode)
@@ -238,10 +239,11 @@ addmargins(table(borders$HospitalCode, borders$Sex))
 
 
 ### Wrangle ----
+library(readr)
 # All examples in the wrangle section require dplyr to be loaded
 library(dplyr)
 # All examples in the wrangle section require the borders dataset
-borders <- readRDS("data/borders.RDS")
+borders <- read_rds("data/borders.rds")
 
 
 #### Day 2 ----
@@ -316,6 +318,7 @@ borders %>%
 
 
 ## Joining Tables (19) ----
+library(readr)
 # merge baby data
 baby5 <- read_csv("data/Baby5.csv")
 baby6 <- read_csv("data/Baby6.csv")
