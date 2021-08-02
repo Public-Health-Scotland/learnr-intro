@@ -119,13 +119,18 @@ rm(x)
 
 ## Control Flow - case statements (31) ----
 library(dplyr)
-x <- c(1, 2, 3, 4, 5)
+x <- c(1:10)
+ # Simple
+case_when(
+  x < 3 ~ "LT3",
+  x %% 2 == 0 ~ "Even")
+
+ # More complicated to show how to catch 'else' conditions
 case_when(
   x < 3 ~ "LT3",
   x %% 2 == 0 ~ "Even",
-  TRUE ~ "Other"
-)
-# Doesn't need to be 'Other' necessarily but do think we should show what happens if none of the conditions apply
+  x <= 5 ~ "LE5",
+  TRUE ~ "GT5 & Odd")
 
 # Remove the created object, x
 rm(x)
