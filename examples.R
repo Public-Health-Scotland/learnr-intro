@@ -39,7 +39,7 @@ rm(hello_world)
 
 ## Style Guide (13) ----
 # Bad
-pts <- ( 'Al','Bert' )
+pts = c ( 'Al','Bert' )
 # Good
 patients <- c("Al", "Bert")
 
