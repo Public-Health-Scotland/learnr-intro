@@ -322,8 +322,7 @@ library(readr)
 # merge baby data
 baby5 <- read_csv("data/Baby5.csv")
 baby6 <- read_csv("data/Baby6.csv")
-baby_joined %>%
-  left_join(baby5, baby6, by = c("FAMILYID", "DOB"))
+baby_joined <- left_join(baby5, baby6, by = c("FAMILYID", "DOB"))
 
 
 ### END OF SCRIPT ###
