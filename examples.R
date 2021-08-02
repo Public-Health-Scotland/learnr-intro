@@ -110,8 +110,8 @@ library(tidyverse)
 
 ## Control Flow - if statements (29) ----
 library(dplyr)
-x <- 5
-if_else(x > 10, TRUE, FALSE)
+x <- c(2, 4, 6, 8)
+if_else(x < 5, "< 5", ">= 5")
 
 # Remove the created object, x
 rm(x)
