@@ -39,7 +39,7 @@ rm(hello_world)
 
 ## Style Guide (13) ----
 # Bad
-pts <- ( 'Al','Bert' )
+pts = c ( 'Al','Bert' )
 # Good
 patients <- c("Al", "Bert")
 
@@ -68,7 +68,7 @@ rm(x)
 
 
 ## Factors (20) ----
-x <- factor(c("M", "F", "M"), 	levels = c("F", "M"))
+x <- factor(c("M", "F", "M"), levels = c("F", "M"))
 x
 
 # Remove the created object, x
@@ -93,7 +93,7 @@ tibble(name = c("Harry", "Sarah"), score = c(62, 91))
 
 
 ## Anatomy of a Function (27) ----
-mult_2 <- function(x){
+mult_2 <- function(x) {
   x <- x * 2
   return(x)
 }
@@ -110,8 +110,8 @@ library(tidyverse)
 
 ## Control Flow - if statements (29) ----
 library(dplyr)
-x <- 5
-if_else(x > 10, TRUE, FALSE)
+x <- c(2, 4, 6, 8)
+if_else(x < 5, "< 5", ">= 5")
 
 # Remove the created object, x
 rm(x)
@@ -119,21 +119,29 @@ rm(x)
 
 ## Control Flow - case statements (31) ----
 library(dplyr)
-x <- c(1, 2, 3, 4, 5)
-case_when(x < 3 ~ "LT3", 
-          x %% 2 == 0 ~ "Even", 
-          TRUE ~ "Other")
-# Doesn't need to be 'Other' necessarily but do think we should show what happens if none of the conditions apply
+x <- c(1:10)
+ # Simple
+case_when(
+  x < 3 ~ "LT3",
+  x %% 2 == 0 ~ "Even")
+
+ # More complicated to show how to catch 'else' conditions
+case_when(
+  x < 3 ~ "LT3",
+  x %% 2 == 0 ~ "Even",
+  x <= 5 ~ "LE5",
+  TRUE ~ "GT5 & Odd")
 
 # Remove the created object, x
 rm(x)
 
 
 ## Iteration - for loop (33) ----
+library(readr)
 files <- list.files(path = here::here("data"), pattern = ".csv")
 all_files <- list()
-for(i in seq_along(files)) {
-  all_files[[i]] <- read.csv(paste0("data/", files[i]))
+for (i in seq_along(files)) {
+  all_files[[i]] <- read_csv(paste0("data/", files[i]))
 }
 
 # Remove the created object, files & all_files
@@ -141,6 +149,7 @@ rm(files, all_files)
 
 
 ## Iteration - loop with purrr (34) ----
+library(readr)
 library(purrr)
 files <- list.files(path = here::here("data"), pattern = ".csv")
 all_files <- map(paste0("data/", files), read_csv)
@@ -153,7 +162,7 @@ rm(files, all_files)
 
 ## Working Directory (39) ----
 getwd()
-here()
+here::here()
 
 
 ## Read CSV (40) ----
@@ -164,8 +173,8 @@ View(borders_csv)
 
 ## Read RDS (41) ----
 library(readr)
-borders_RDS <- 	read_rds("data/borders.rds")
-write_rds(borders, "data/borders.rds")
+borders_rds <- read_rds("data/borders.rds")
+write_rds(borders_rds, "data/borders.rds")
 
 
 ## Read SPSS (42) ----
@@ -191,14 +200,18 @@ resource <- dplyr::tbl(src = ckan$con, from = res_id) %>%
 ## Database SMRA (45) ----
 library(odbc)
 # Establish connection
-smra_connection <- dbConnect(drv = odbc(), 
-                             dsn = "SMRA",
-                             uid = .rs.askForPassword("SMRA Username:"), 
-                             pwd = .rs.askForPassword("SMRA Password:"))
+smra_connection <- dbConnect(
+  drv = odbc(),
+  dsn = "SMRA",
+  uid = .rs.askForPassword("SMRA Username:"),
+  pwd = .rs.askForPassword("SMRA Password:")
+)
 # Example extract
-smr01 <- dbGetQuery(smra_connection, paste("select DISCHARGE_DATE, LOCATION, MAIN_OPERATION",
-                                           "from SMR01_PI",
-                                           "where ROWNUM <= 100"))
+smr01 <- dbGetQuery(smra_connection, paste(
+  "select DISCHARGE_DATE, LOCATION, MAIN_OPERATION",
+  "from SMR01_PI",
+  "where ROWNUM <= 100"
+))
 
 
 ## Write CSV (46) ----
@@ -215,7 +228,8 @@ summary(borders$LengthOfStay)
 
 
 ## Frequencies & Crosstabs (49) ----
-borders <- readRDS("data/borders.RDS")
+library(readr)
+borders <- read_rds("data/borders.rds")
 
 # Frequency Table
 table(borders$HospitalCode)
@@ -230,10 +244,11 @@ addmargins(table(borders$HospitalCode, borders$Sex))
 
 
 ### Wrangle ----
+library(readr)
 # All examples in the wrangle section require dplyr to be loaded
 library(dplyr)
 # All examples in the wrangle section require the borders dataset
-borders <- readRDS("data/borders.RDS")
+borders <- read_rds("data/borders.rds")
 
 
 #### Day 2 ----
@@ -249,13 +264,13 @@ borders %>%
 
 ## Filter (7) ----
 # all cases with E12 specialty
-borders %>% 
+borders %>%
   filter(Specialty == "E12")
 
 # B120H cases more than 10 days
 borders %>%
   filter(HospitalCode == "B120H" &
-           LengthOfStay > 10)
+    LengthOfStay > 10)
 
 
 ## Mutate (8) ----
@@ -308,11 +323,11 @@ borders %>%
 
 
 ## Joining Tables (19) ----
+library(readr)
 # merge baby data
 baby5 <- read_csv("data/Baby5.csv")
 baby6 <- read_csv("data/Baby6.csv")
-baby_joined %>%
-  left_join(baby5, baby6, by = c("FAMILYID", "DOB"))
+baby_joined <- left_join(baby5, baby6, by = c("FAMILYID", "DOB"))
 
 
 ### END OF SCRIPT ###
