@@ -1,5 +1,5 @@
 ## Project ----
-## This is a small project to test your knowledge of many of the topics 
+## This is a small project to test your knowledge of many of the topics
 ## covered in the training. Write your code under each instruction. Remember
 ## to use the help section, Google/StackOverflow, or ask for help if you get
 ## stuck. See you at the drop-in session!
@@ -9,14 +9,14 @@
 
 
 
-# 2. Read in both `PM_Borders1.csv` and `PM_Borders2.csv` separately 
+# 2. Read in both `PM_Borders1.csv` and `PM_Borders2.csv` separately
 #     using `read_csv()` ----
 
 
 
 
 # 3. `PM_Borders1` and `PM_Borders2` have the same columns and there are ----
-#     some records that exist within both files. Choose an appropriate join 
+#     some records that exist within both files. Choose an appropriate join
 #     function to merge these data frames together and call this `joined_data`
 
 
@@ -29,32 +29,38 @@
 
 
 # 5. Take all records in `joined_data` which have `ManagementofPatient` ----
-#     values “Day Case in Inpatient Ward” or “Day Case in Day Bed Unit” and 
-#     store them in a dataframe called `day_cases`. Calculate a new column `LOS2` 
+#     values “Day Case in Inpatient Ward” or “Day Case in Day Bed Unit” and
+#     store them in a dataframe called `day_cases`. Calculate a new column `LOS2`
 #     for `LengthOfStay` multiplied by two.
 
 
 
 
 # 6. Group `joined_data` by `Specialty` and then calculate the mean ----
-#     `LengthOfStay` value for each `Specialty`. Arrange the data by mean 
+#     `LengthOfStay` value for each `Specialty`. Arrange the data by mean
 #     `LengthOfStay` from largest to smallest.
 
 
 
 
 # 7. Select the `LinkNo`, `HospitalCode` and `Main_op` columns in  ----
-#     `joined_data` and rename the `Main_op` column to `Main_Operation`. Store 
-#     this data in a dataframe called `filtered_data` and only keep records 
-#     that do not have a missing value for `Main_Operation`. How many records 
+#     `joined_data` and rename the `Main_op` column to `Main_Operation`. Store
+#     this data in a dataframe called `filtered_data` and only keep records
+#     that do not have a missing value for `Main_Operation`. How many records
 #     have been removed?
 
 
 
 
-# 8. Plot a histogram of `LengthOfStay` for records in `joined_data` with a
-#     `DateofAdmission` in April 2015. Give your histogram a suitable title,
-#     colour and axis labels.
+# 8. To finish this project, run the code to produce a histogram of
+#     `LengthOfStay` for records in `joined_data` with a `DateofAdmission`
+#     in April 2015. This is just for interest, a Data Visualisation course is
+#     available if you want to learn more.
 
-
-
+hist_data <- joined_data %>%
+  filter(DateofAdmission >= 20150401 & DateofAdmission <= 20150430)
+hist(hist_data$LengthOfStay,
+     col = "lightblue",
+     main = "Histogram of Length of Stay for April 2015",
+     xlab = "Length of Stay",
+     ylab = "Frequency")
