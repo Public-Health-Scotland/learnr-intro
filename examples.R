@@ -3,7 +3,7 @@
 # Name of file - examples.R
 # Original author - Russell McCreath
 #
-# Version of R - 3.6.1
+# Version of R - 4.1.2
 #
 # Description - An accompanying R script to work alongside the
 # Introduction to R training. This provides example code from the slides.
@@ -89,6 +89,7 @@ data.frame(name = c("Harry", "Sarah"), score = c(62, 91))
 
 
 ## Tibbles (25) ----
+library(tibble)
 tibble(name = c("Harry", "Sarah"), score = c(62, 91))
 
 
@@ -222,7 +223,7 @@ write_csv(borders_csv, "data/borders.csv")
 ### Explore ----
 
 ## Mean/Median & Summary (48) ----
-borders <- readRDS("data/borders.RDS")
+borders <- readRDS("data/borders.rds")
 mean(borders[["LengthOfStay"]])
 summary(borders$LengthOfStay)
 
@@ -319,7 +320,7 @@ borders %>%
 ## Recode (17) ----
 # change hospital code
 borders %>%
-  mutate(HospitalCode = recode("B120V" = "B120H"))
+  mutate(HospitalCode = recode(HospitalCode, "B120V" = "B120H"))
 
 
 ## Joining Tables (19) ----
